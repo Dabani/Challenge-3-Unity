@@ -16,9 +16,11 @@ public class PlayerControllerX : MonoBehaviour
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
+    public AudioClip bounceSound;
     private bool isLowEnough;
     // set the top boundary to keep the balloon viewed in the scene
     private float topBoundary = 14.0f;
+    private float bounceForce = 10.0f;
 
 
     // Start is called before the first frame update
@@ -72,6 +74,14 @@ public class PlayerControllerX : MonoBehaviour
             playerAudio.PlayOneShot(moneySound, 1.0f);
             Destroy(other.gameObject);
 
+        }
+
+        // if player collides with the ground, bounce
+        else if (other.gameObject.CompareTag("Ground"))
+        {
+            playerRb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+            playerAudio.PlayOneShot(bounceSound, 1.0f);
+            Debug.Log("Ground hitted!");
         }
 
     }
