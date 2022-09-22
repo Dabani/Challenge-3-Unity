@@ -6,7 +6,7 @@ public class PlayerControllerX : MonoBehaviour
 {
     public bool gameOver;
 
-    public float floatForce;
+    private float floatForce = 50.0f;
     private float gravityModifier = 1.5f;
     private Rigidbody playerRb;
 
@@ -16,6 +16,9 @@ public class PlayerControllerX : MonoBehaviour
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
+    private bool isLowEnough;
+    // set the top boundary to keep the balloon viewed in the scene
+    private float topBoundary = 14.0f;
 
 
     // Start is called before the first frame update
@@ -31,10 +34,20 @@ public class PlayerControllerX : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        // While space is pressed and player is low enough, float up
-        if (Input.GetKey(KeyCode.Space) && !gameOver)
+        if (transform.position.y > topBoundary)
+        {
+            isLowEnough = false;
+            // stop the balloon to fly up
+            playerRb.velocity = Vector3.zero;
+        }
+        else
+        {
+            isLowEnough = true;
+        }
+        // While space is pressed and player is low enough, float up       
+        if (Input.GetKey(KeyCode.Space) && !gameOver && isLowEnough == true)
         {
             playerRb.AddForce(Vector3.up * floatForce);
         }
